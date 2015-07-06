@@ -1,12 +1,15 @@
 package com.guitar.db;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.guitar.db.repository.LocationJpaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class LocationPersistenceTests {
 	@Test
 	@Transactional
 	public void testSaveAndGetAndDelete() throws Exception {
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
 		Location location = new Location();
 		location.setCountry("Canada");
 		location.setState("British Columbia");
@@ -63,4 +68,17 @@ public class LocationPersistenceTests {
 		
 		assertEquals("Fender Musical Instruments Corporation", arizona.getManufacturers().get(0).getName());
 	}
+
+	@Autowired
+	private LocationJpaRepository locationJpaRepository;
+
+    @Test
+    @Transactional
+    public void testJpaFind(){
+        List<Location> locations = locationJpaRepository.findAll();
+        assertNotNull(locations);
+        assertTrue(locations.size() > 0);
+    }
+
+
 }

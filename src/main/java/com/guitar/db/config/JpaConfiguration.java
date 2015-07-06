@@ -22,7 +22,7 @@ public class JpaConfiguration {
 
 	@Bean
 	public Map<String, Object> jpaProperties() {
-		Map<String, Object> props = new HashMap<String, Object>();
+		Map<String, Object> props = new HashMap<>();
 		props.put("hibernate.dialect", H2Dialect.class.getName());
 //		props.put("hibernate.cache.provider_class", HashtableCacheProvider.class.getName());
 		return props;
