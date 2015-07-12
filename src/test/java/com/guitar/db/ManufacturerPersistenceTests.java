@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Date;
 import java.util.List;
 
+import com.guitar.db.repository.ManufacturerJpaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,27 @@ public class ManufacturerPersistenceTests {
 		List<Manufacturer> mans = manufacturerRepository.getManufacturersFoundedBeforeDate(new Date());
 		assertEquals(2, mans.size());
 	}
+
+    @Autowired
+    private ManufacturerJpaRepository manufacturerJpaRepository;
+
+    @Test
+	public void testFindByFoundedDateBefore(){
+        List<Manufacturer> mans = manufacturerJpaRepository.findByFoundedDateBefore(new Date());
+        assertEquals(2, mans.size());
+    }
+
+    @Test
+    public void testFindByActiveTrue(){
+        List<Manufacturer> mans = manufacturerJpaRepository.findByActiveTrue();
+        assertEquals(1, mans.size());
+    }
+
+    @Test
+    public void testFindByActiveFalse(){
+        List<Manufacturer> mans = manufacturerJpaRepository.findByActiveFalse();
+        assertEquals(1, mans.size());
+    }
 
 	@Test
 	public void testGetManufactureByName() throws Exception {

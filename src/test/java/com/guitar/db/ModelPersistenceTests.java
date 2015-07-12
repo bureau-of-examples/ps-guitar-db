@@ -1,14 +1,18 @@
 package com.guitar.db;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.guitar.db.repository.ModelJpaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +55,12 @@ public class ModelPersistenceTests {
 		modelRepository.delete(otherModel);
 	}
 
-	@Test
+    @Autowired
+	private ModelJpaRepository modelJpaRepository;
+
+    @Test
 	public void testGetModelsInPriceRange() throws Exception {
-		List<Model> mods = modelRepository.getModelsInPriceRange(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L));
+		List<Model> mods = modelJpaRepository.findByPriceGreaterThanEqualAndPriceLessThanEqual(new BigDecimal("1000"), new BigDecimal("2000")); //modelRepository.getModelsInPriceRange(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L));
 		assertEquals(4, mods.size());
 	}
 
@@ -68,4 +75,17 @@ public class ModelPersistenceTests {
 		List<Model> mods = modelRepository.getModelsByType("Electric");
 		assertEquals(4, mods.size());
 	}
+
+    @Transactional
+    @Test
+    public void testFindModelTypeIn(){
+        List<String> types = Arrays.asList("Electric", "Acoustic");
+        List<Model> mods = modelJpaRepository.findByModelTypeNameIn(types);
+        assertTrue(mods.size() > 0);
+        for (Model model : mods){
+            assertTrue(types.contains(model.getModelType().getName()));
+        }
+
+
+    }
 }
