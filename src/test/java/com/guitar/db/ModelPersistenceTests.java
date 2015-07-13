@@ -76,6 +76,13 @@ public class ModelPersistenceTests {
 		assertEquals(4, mods.size());
 	}
 
+    @Test
+    public void testFindAllModelsByType() throws Exception {
+        List<Model> mods = modelJpaRepository.findAllModelsByType("Electric");
+        assertEquals(4, mods.size());
+    }
+
+
     @Transactional
     @Test
     public void testFindModelTypeIn(){
@@ -85,7 +92,12 @@ public class ModelPersistenceTests {
         for (Model model : mods){
             assertTrue(types.contains(model.getModelType().getName()));
         }
-
-
     }
+
+	@Transactional
+	@Test
+	public void testQueryByPriceRangeAndWoodType(){
+        List<Model> mods = modelJpaRepository.queryByPriceRangeAndWoodType(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L), "%Maple%");
+        assertEquals(3, mods.size());
+	}
 }

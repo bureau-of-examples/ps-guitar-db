@@ -65,4 +65,14 @@ public class ModelTypePersistenceTests {
         }
 		assertEquals(all.size(), nullOnes.size() + notNullOnes.size());
 	}
+
+	@Test
+	@Transactional
+	public void testJpaModifying(){
+		int rowsUpdated = modelTypeRepository.updateByName(null, "RunningMan");
+		assertEquals(1, rowsUpdated);
+
+		rowsUpdated = modelTypeRepository.updateByName("RunningMan", null);
+		assertEquals(1, rowsUpdated);
+	}
 }
