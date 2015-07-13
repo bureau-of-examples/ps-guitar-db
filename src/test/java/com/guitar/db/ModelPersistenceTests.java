@@ -16,6 +16,9 @@ import com.guitar.db.repository.ModelJpaRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +85,22 @@ public class ModelPersistenceTests {
         assertEquals(4, mods.size());
     }
 
+    @Test
+    public void testFindAllModelsByTypePageable(){
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        Page<Model> page = modelJpaRepository.findAllModelsByType("Electric", new PageRequest(0, 3, sort));
+        assertEquals(3, page.getSize());
+        Model previousModel = null;
+        for(Model model : page.getContent()) {
+
+            assertEquals("Electric", model.getModelType().getName());
+            if(previousModel != null){
+                assertTrue(previousModel.getName().compareTo(model.getName()) <= 0);
+            }
+            previousModel = model;
+        }
+    }
+
 
     @Transactional
     @Test
@@ -100,4 +119,9 @@ public class ModelPersistenceTests {
         List<Model> mods = modelJpaRepository.queryByPriceRangeAndWoodType(BigDecimal.valueOf(1000L), BigDecimal.valueOf(2000L), "%Maple%");
         assertEquals(3, mods.size());
 	}
+
+    @Test
+    public void testCustomImpl(){
+        modelJpaRepository.aCustomMethod();
+    }
 }

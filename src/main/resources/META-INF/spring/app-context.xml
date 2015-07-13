@@ -32,5 +32,10 @@
 
 	<jpa:repositories base-package="com.guitar.db.repository" >
 
-	</jpa:repositories><!---->
+	</jpa:repositories>
+
+	<!--
+	Enable @CreatedBy, @CreatedDate, @LastModifiedBy, @LastModifiedDate
+	<jpa:auditing auditor-aware-ref="..." />
+	-->
 </beans>
